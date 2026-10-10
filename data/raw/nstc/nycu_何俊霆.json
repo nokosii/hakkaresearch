@@ -1,0 +1,169 @@
+{
+ "school": "nycu",
+ "dept": "傳播與科技學系",
+ "name": "何俊霆",
+ "title": "",
+ "profile": "https://dcat.nycu.edu.tw/members/%e4%bd%95%e4%bf%8a%e9%9c%86/",
+ "candidates": [
+  [
+   "何俊霆 Justin Chun-ting Ho",
+   "國立陽明交通大學傳播與科技學系",
+   "助理教授",
+   "03-5712121#31513",
+   "",
+   ""
+  ]
+ ],
+ "rsNo": "0ffdb778440c4984ab2cc8a32d755557",
+ "nstc_row": [
+  "何俊霆 Justin Chun-ting Ho",
+  "國立陽明交通大學傳播與科技學系",
+  "助理教授",
+  "03-5712121#31513",
+  "",
+  ""
+ ],
+ "basic": [
+  [
+   "中文姓名",
+   "何俊霆"
+  ],
+  [
+   "英文姓名",
+   "Justin Chun-ting Ho"
+  ],
+  [
+   "性別",
+   "[不公開]"
+  ],
+  [
+   "個人網站",
+   "[不公開]"
+  ],
+  [
+   "聯絡地址",
+   "[不公開]"
+  ],
+  [
+   "聯絡電話(公)",
+   "03-5712121#31513"
+  ],
+  [
+   "傳真",
+   "[不公開]"
+  ],
+  [
+   "電子郵件信箱",
+   "[不公開]"
+  ],
+  [
+   "服務機關",
+   "國立陽明交通大學傳播與科技學系"
+  ],
+  [
+   "職稱",
+   "助理教授"
+  ],
+  [
+   "專長",
+   "[不公開]"
+  ]
+ ],
+ "pubs": [
+  [
+   "2026-02",
+   "期刊論文",
+   "Newer, larger, better? A critique of the unreflective LLM adoption in Communication Research",
+   "Paul Balluff, Justin Chun-ting Ho, Johannes B. Gruber, Sean Palicki, Alexis Palmer, Luca Rossi, Irina Shklovski, Chung-hong Chan",
+   "Political Communication"
+  ],
+  [
+   "2024-06",
+   "期刊論文",
+   "Hong Kong Anti-colonial Nationalism during the Chinese Language Campaign",
+   "Justin Chun-ting Ho",
+   "China Quarterly"
+  ],
+  [
+   "2024-01",
+   "期刊論文",
+   "Mainstreaming the populist radical right? Online news exposure and voting behavior in the 2019 European Parliament election",
+   "Sebastian Stier, Caterina Froio, Justin Ho",
+   "European Political Science Review"
+  ],
+  [
+   "2023-01",
+   "期刊論文",
+   "Evaluating Transferability in Multilingual Text Analyses",
+   "Justin Chun-ting Ho, Chung-hong Chan",
+   "Computational Communication Research"
+  ],
+  [
+   "2023-01",
+   "期刊論文",
+   "The Internationalism of Stateless Nations: The case of Hong Kong",
+   "Justin Chun-ting Ho",
+   "Nations and Nationalism"
+  ],
+  [
+   "2022-10",
+   "期刊論文",
+   "Understanding Hong Kong Nationalism: A Topic Network Approach",
+   "Justin Chun-ting Ho",
+   "Nations and Nationalism"
+  ],
+  [
+   "2021-10",
+   "期刊論文",
+   "Analyzing protest mobilization on Telegram: The case of 2019 Anti-Extradition Bill movement in Hong Kong",
+   "Aleksandra Urman, Justin Chun-ting Ho, Stefan Katz",
+   "PLoS One"
+  ],
+  [
+   "2021-06",
+   "期刊論文",
+   "academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint",
+   "Christopher Barrie, Justin Chun-ting Ho",
+   "Journal of Open Source Software"
+  ],
+  [
+   "2021-03",
+   "期刊論文",
+   "Troubling content: Guiding discussion of death by suicide on social media",
+   "Julie Brownlie, Justin Chun-ting Ho, Nikki Dunne, Nichole Fernández, Tim Squirrell",
+   "Sociology of Health & Illness"
+  ],
+  [
+   "2019-09",
+   "期刊論文",
+   "How Biased is the Sample? Reverse Engineering the Ranking Algorithm of Facebook's Graph API",
+   "Justin Chun-ting Ho",
+   "Big Data & Society"
+  ],
+  [
+   "2019-06",
+   "研討會論文",
+   "Uphill from here: Sentiment patterns in videos from left- and right-wing YouTube news channels",
+   "Felix Soldner, Justin Chun-ting Ho, Mykola Makhortykh, Isabelle W.J. van der Vegt, Maximilian Mozes, Bennett Kleinberg",
+   ""
+  ]
+ ],
+ "projects": [
+  [
+   "115",
+   "補助國內專家學者出席國際學術會議",
+   "傳播研究方法論與研究法",
+   "76th Annual International Communication Association Conference",
+   "計畫主持人",
+   "110,000"
+  ],
+  [
+   "115",
+   "專題研究計畫 (新進人員研究計畫)",
+   "電訊傳播／傳播科技",
+   "跨國民族主義：民族主義全球擴散的路徑、媒介與效果",
+   "計畫主持人",
+   "2,720,000"
+  ]
+ ]
+}
