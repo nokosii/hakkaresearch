@@ -55,6 +55,7 @@ def roc2ad(y):
   except: return None
   return y+1911 if y<1911 else y
 
+STATUS_OVERRIDE={'張維安':'left'}  # 依維護者確認：已離職，職稱仍顯示榮譽教授
 heritage_manual={}
 hp=f'{BASE}/data/heritage.json'
 if os.path.exists(hp): heritage_manual=json.load(open(hp,encoding='utf-8'))
@@ -179,7 +180,7 @@ for line in open(f'{BASE}/data/roster.tsv',encoding='utf-8'):
     'profile':url,'nstc':(f"{NSTC}?action=initBasic&rsNo={d['rsNo']}&LANG=chi" if d.get('rsNo') else None),
     'nstcPubs':(f"{NSTC}?action=initRsm05&rsNo={d['rsNo']}&LANG=chi" if d.get('rsNo') else None),
     'nstcProj':(f"{NSTC}?action=initRsm17new&rsNo={d['rsNo']}&LANG=chi" if d.get('rsNo') else None),
-    'pubs':pubs,'projects':projs,'otherProjects':other,'status':('left' if ('離職' in title or '非現任' in title) else ('retired' if ('退休' in title or '榮譽' in title) else 'active')),'supp':supp,'medals':medals,'awards':awards,
+    'pubs':pubs,'projects':projs,'otherProjects':other,'status':STATUS_OVERRIDE.get(name) or ('left' if ('離職' in title or '非現任' in title) else ('retired' if ('退休' in title or '榮譽' in title) else 'active')),'supp':supp,'medals':medals,'awards':awards,
     'heritage':her,
     'stats':{'pubs':len(pubs),'hakkaPubs':len(hp_),'hakkaPubs5y':len(rec5),'projects':len(projs),'hakkaProjects':len(hj)+len(ho),'hakkaNstcProjects':len(hj),'hakkaOtherProjects':len(ho),'otherProjects':len(other),'hakkaProjByCat':bycat,
              'hakkaProjAmt':sum(p['amount'] for p in hj)+sum(p['amount'] for p in ho),'supp':len(supp),'indPubs':sum(1 for p in pubs if p['ind']),'indProjects':sum(1 for p in projs if p['ind']),
