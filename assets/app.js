@@ -2,7 +2,9 @@
 (function () {
   'use strict';
   const D = window.HKO_DATA;
-  const P = D.people;
+  // 是否顯示退休、離職教師（資料仍保留在 data/data.json；改為 true 即恢復顯示）
+  const SHOW_INACTIVE = false;
+  const P = SHOW_INACTIVE ? D.people : D.people.filter(p => p.status === 'active');
   const SCH = D.schools;
   const ORDER = ['nuu', 'ncu', 'nycu'];
   const SC = { nuu: 'var(--s-nuu)', ncu: 'var(--s-ncu)', nycu: 'var(--s-nycu)' };
@@ -80,7 +82,7 @@
     let h = `<section class="hero">
       <div class="eyebrow">三校客家學院 · 專任師資研究觀察</div>
       <h1>誰在建構臺灣客家知識體系？</h1>
-      <p class="lede">本站彙整國立聯合大學客家研究學院、國立中央大學客家學院、國立陽明交通大學客家文化學院共 ${all.n} 位現任專任教師（另收錄 ${ret.length} 位退休、離職教師）的公開研究紀錄，統計其客家、客語、客庄相關的著作，以及國科會、客委會、文化部、教育部與產學合作等研究計畫。所有數字都可點入個人頁核對逐筆原始條目。</p>
+      <p class="lede">本站彙整國立聯合大學客家研究學院、國立中央大學客家學院、國立陽明交通大學客家文化學院共 ${all.n} 位現任專任教師${SHOW_INACTIVE ? `（另收錄 ${ret.length} 位退休、離職教師）` : ''}的公開研究紀錄，統計其客家、客語、客庄相關的著作，以及國科會、客委會、文化部、教育部與產學合作等研究計畫。所有數字都可點入個人頁核對逐筆原始條目。</p>
       <div class="kpis">
         <div class="kpi"><div class="v">${all.n}</div><div class="l">現任專任教師</div><div class="s">3 校 · ${new Set(P.map(p => p.school + p.dept)).size} 個系所</div></div>
         <div class="kpi"><div class="v">${all.withHakkaPub}</div><div class="l">有客家相關著作的教師</div><div class="s">占 ${pct(all.withHakkaPub, all.n)}%</div></div>
@@ -104,7 +106,7 @@
           <dt style="padding-left:12px;font-size:14px">└ 其他機關、企業／法人等</dt><dd style="font-weight:500">${a.hakkaProjects - MAINCATS.reduce((x, c) => x + a.cat[c], 0)}</dd>
           <dt>其中產學合作／委辦案</dt><dd>${a.iuc} 件</dd>
           <dt>獲客家貢獻獎／專業獎章</dt><dd>${a.honors} 人</dd>
-          <dt>退休／離職教師（另列）</dt><dd>${P.filter(p => p.school === s && !isActive(p)).length} 人</dd>
+          ${SHOW_INACTIVE ? `<dt>退休／離職教師（另列）</dt><dd>${P.filter(p => p.school === s && !isActive(p)).length} 人</dd>` : ''}
         </dl>
         <div class="depts">${depts(s).map(d => { const x = agg(L.filter(p => p.dept === d)); return `<div><span>${esc(d)}</span><span>${x.withHakkaPub}/${x.n} 人</span></div>`; }).join('')}</div>
         <a class="more" href="#/faculty?school=${s}">查看該校教師 →</a>
@@ -200,7 +202,7 @@
         <input type="search" id="q" placeholder="搜尋姓名、系所…" value="${esc(state.q)}" aria-label="搜尋">
         <select id="fs" aria-label="學校"><option value="">全部學校</option>${ORDER.map(s => `<option value="${s}" ${s === state.school ? 'selected' : ''}>${SCH[s].name}</option>`).join('')}</select>
         <select id="fd" aria-label="系所"><option value="">全部系所</option>${deptOpts.map(([s, d]) => `<option value="${esc(d)}" ${d === state.dept ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select>
-        <select id="fst" aria-label="在職狀態"><option value="">全部（含退休、離職）</option><option value="active" ${state.st === 'active' ? 'selected' : ''}>僅現任專任</option><option value="retired" ${state.st === 'retired' ? 'selected' : ''}>僅退休／離職</option></select>
+        ${SHOW_INACTIVE ? `<select id="fst" aria-label="在職狀態"><option value="">全部（含退休、離職）</option><option value="active" ${state.st === 'active' ? 'selected' : ''}>僅現任專任</option><option value="retired" ${state.st === 'retired' ? 'selected' : ''}>僅退休／離職</option></select>` : ''}
         <span class="count" id="cnt"></span>
       </div>
       <div class="table-wrap"><table><thead><tr>
@@ -212,7 +214,7 @@
     q.addEventListener('input', () => { state.q = q.value; draw(); });
     fs.addEventListener('change', () => { location.hash = '#/faculty' + (fs.value ? '?school=' + fs.value : ''); });
     fd.addEventListener('change', () => { state.dept = fd.value; draw(); });
-    const fst = document.getElementById('fst'); fst.addEventListener('change', () => { state.st = fst.value; draw(); });
+    const fst = document.getElementById('fst'); if (fst) fst.addEventListener('change', () => { state.st = fst.value; draw(); });
     $main.querySelectorAll('th button').forEach(b => b.addEventListener('click', () => { const k = b.dataset.k; state.dir = state.sort === k ? -state.dir : (k === 'name' ? 1 : -1); state.sort = k; draw(); }));
     function draw() {
       let L = P.filter(p => (!state.school || p.school === state.school) && (!state.dept || p.dept === state.dept) && (!state.st || (state.st === 'active' ? isActive(p) : !isActive(p))) && (!state.q || (p.name + p.dept + SCH[p.school].name + p.title).includes(state.q.trim())));
@@ -303,7 +305,7 @@
       <li>國立中央大學客家學院：客家語文暨社會科學學系（含系主任、專案教師）、法律與政府研究所</li>
       <li>國立陽明交通大學客家文化學院：人文社會學系、傳播與科技學系</li>
     </ul>
-    <p>主要統計只計<b>現任專任教師</b>（不含兼任、合聘、講座）。另收錄<b>退休教師</b>：系所網站列為退休／榮譽教授者、經本站維護者確認已退休者（部分系所網站尚未更新），以及國科會「研究人才查詢」以系所為條件查得、仍登錄於該系所但已不在系所專任名單上的教師。已離開該校者標示為「離職」。退休與離職教師在名錄中加註標籤，可用篩選切換；總覽各項數字只計現任教師。</p>
+    <p>主要統計只計<b>現任專任教師</b>（不含兼任、合聘、講座）。${SHOW_INACTIVE ? `另收錄<b>退休教師</b>：系所網站列為退休／榮譽教授者、經本站維護者確認已退休者（部分系所網站尚未更新），以及國科會「研究人才查詢」以系所為條件查得、仍登錄於該系所但已不在系所專任名單上的教師。已離開該校者標示為「離職」。退休與離職教師在名錄中加註標籤，可用篩選切換；總覽各項數字只計現任教師。` : '退休、離職教師目前不在網站上顯示。'}</p>
     <h2>2. 研究成果</h2>
     <p>著作以國家科學及技術委員會「研究人才查詢」的「著作目錄」為統一來源，三校格式一致，能用同一把尺比較。著作目錄由教師自行登錄，完整度因人而異；同一著作重複登錄（同標題、同年份）只算一次。</p>
     <h2>3. 研究計畫的來源</h2>
