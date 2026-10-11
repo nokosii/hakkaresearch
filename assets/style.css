@@ -168,3 +168,8 @@ details.all summary{cursor:pointer;color:var(--indigo-2);font-size:15px}
   .ev-list li{grid-template-columns:1fr;gap:2px}
   .hbar{grid-template-columns:72px 1fr 56px}
 }
+.tag.award{border-color:#7d5ba6;color:#5e3f87;background:#f1eaf8}
+.tag.ret{border-color:var(--line-2);background:var(--surface-2);color:var(--ink-2);font-size:11px;vertical-align:2px}
+:root[data-theme="dark"] .tag.award{background:#2a2136;color:#c9b3e6;border-color:#5b4580}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.award{background:#2a2136;color:#c9b3e6;border-color:#5b4580}}
+td.rank{color:var(--muted);font-size:14px;width:3em}

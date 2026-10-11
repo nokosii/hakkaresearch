@@ -1,0 +1,37 @@
+{
+ "name": "廖哲強",
+ "school": "nuu",
+ "excuGroups": [
+  {
+   "baseSeq": null,
+   "code": "ZZZZZZZZZ",
+   "name": "個人",
+   "value": 1
+  }
+ ],
+ "planGroups": [
+  {
+   "baseSeq": null,
+   "code": "BZL0",
+   "name": "客家委員會",
+   "value": 1
+  }
+ ],
+ "baseSeq": null,
+ "projects": [
+  {
+   "id": 8257840,
+   "year": 103,
+   "title": "詔安客家文化再建構-雲林二崙來惠社區營造個案",
+   "keyword": "詔安客；社區營造；來惠社區",
+   "amount": 88,
+   "projkey": "PG10304-0140",
+   "agency": "客家委員會",
+   "excu": "個人",
+   "hosts": [
+    "廖哲強"
+   ],
+   "abstract": "本研究以來惠社區為研究個案，探究社造過程中各權益行動人的關係網絡？如何認定與保存客家文化資源，以及動員社區居民，重新建構客家認同與再現文化空間？以及在行動的過程中所引發一系列社會衝突與困難，可作為日後相關單位推動詔安客家聚落社區營造之參考。"
+  }
+ ]
+}

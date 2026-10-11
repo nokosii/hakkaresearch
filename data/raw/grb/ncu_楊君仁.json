@@ -1,0 +1,99 @@
+{
+ "name": "楊君仁",
+ "school": "ncu",
+ "excuGroups": [
+  {
+   "baseSeq": null,
+   "code": "FA07FA30",
+   "name": "國立中央大學共同學科",
+   "value": 3
+  },
+  {
+   "baseSeq": null,
+   "code": "FA07K032X",
+   "name": "國立中央大學通識教育中心",
+   "value": 2
+  }
+ ],
+ "planGroups": [
+  {
+   "baseSeq": null,
+   "code": "BT00",
+   "name": "行政院國家科學委員會",
+   "value": 5
+  }
+ ],
+ "baseSeq": 19158,
+ "projects": [
+  {
+   "id": 633681,
+   "year": 90,
+   "title": "有限公司決議瑕疵之研究",
+   "keyword": "公司法；瑕疵決議；有限公司",
+   "amount": 326,
+   "projkey": "PF9007-0681",
+   "agency": "行政院國家科學委員會",
+   "excu": "國立中央大學通識教育中心",
+   "hosts": [
+    "楊君仁"
+   ],
+   "abstract": ""
+  },
+  {
+   "id": 556999,
+   "year": 89,
+   "title": "我國加入世界貿易組織後對敵意購併問題之研究",
+   "keyword": null,
+   "amount": 322,
+   "projkey": "PF8909-0403",
+   "agency": "行政院國家科學委員會",
+   "excu": "國立中央大學通識教育中心",
+   "hosts": [
+    "楊君仁"
+   ],
+   "abstract": ""
+  },
+  {
+   "id": 221288,
+   "year": 85,
+   "title": "海峽兩岸公司法之比較研究",
+   "keyword": "公司法；有限公司；股份有限公司；合併；台灣；中國大陸；比較研究",
+   "amount": 277,
+   "projkey": "PC8501-1059",
+   "agency": "行政院國家科學委員會",
+   "excu": "國立中央大學共同學科",
+   "hosts": [
+    "楊君仁"
+   ],
+   "abstract": ""
+  },
+  {
+   "id": 35978,
+   "year": 82,
+   "title": "公平交易法施行以來之檢討研究計劃",
+   "keyword": null,
+   "amount": 98,
+   "projkey": "PS8201-1742",
+   "agency": "行政院國家科學委員會",
+   "excu": "國立中央大學共同學科",
+   "hosts": [
+    "楊君仁"
+   ],
+   "abstract": ""
+  },
+  {
+   "id": 195003,
+   "year": 84,
+   "title": "企業社會責任之法制化研究",
+   "keyword": "企業；社會責任；經濟法；公司法；社會倫理",
+   "amount": 275,
+   "projkey": "PC8407-1166",
+   "agency": "行政院國家科學委員會",
+   "excu": "國立中央大學共同學科",
+   "hosts": [
+    "楊君仁"
+   ],
+   "abstract": ""
+  }
+ ]
+}

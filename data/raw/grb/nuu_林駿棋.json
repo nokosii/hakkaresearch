@@ -1,0 +1,37 @@
+{
+ "name": "林駿棋",
+ "school": "nuu",
+ "excuGroups": [
+  {
+   "baseSeq": null,
+   "code": "FA08E001G",
+   "name": "國立中山大學政治學研究所",
+   "value": 1
+  }
+ ],
+ "planGroups": [
+  {
+   "baseSeq": null,
+   "code": "BT100",
+   "name": "科技部",
+   "value": 1
+  }
+ ],
+ "baseSeq": null,
+ "projects": [
+  {
+   "id": 13871702,
+   "year": 110,
+   "title": "Communicative patterns of populism on social media: Germany and Taiwan compared",
+   "keyword": null,
+   "amount": 480,
+   "projkey": "PF11007-1208",
+   "agency": "科技部",
+   "excu": "國立中山大學政治學研究所",
+   "hosts": [
+    "林駿棋"
+   ],
+   "abstract": ""
+  }
+ ]
+}

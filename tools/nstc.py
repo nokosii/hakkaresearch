@@ -37,7 +37,7 @@ for line in open('data/roster.tsv',encoding='utf-8'):
     a=tr.find('a',href=re.compile('initBasic'))
     if a and len(cells)>=3:
       cands.append({'cells':cells,'rsNo':re.search(r'rsNo=([0-9a-f]+)',a['href']).group(1)})
-  pick=[c for c in cands if SCH[sch] in ' '.join(c['cells'])] or [c for c in cands if PHONE[sch] in ''.join(c['cells']).replace('-','')] or (cands if len(cands)==1 and name in ('吳岱芸',) else [])
+  pick=[c for c in cands if SCH[sch] in ' '.join(c['cells'])] or [c for c in cands if PHONE[sch] in ''.join(c['cells']).replace('-','')] or (cands if len(cands)==1 else [])
   rec={'school':sch,'dept':dept,'name':name,'title':title,'profile':url,'candidates':[c['cells'] for c in cands]}
   if len(pick)>=1:
     rs=pick[0]['rsNo']; rec['rsNo']=rs; rec['nstc_row']=pick[0]['cells']
