@@ -19,23 +19,25 @@ def is_end(l):
     return not HDR_KW.search(inner)
   return len(l)<=24 and not re.search(r'(19|20)\d\d',l)
 def projects(txt):
+  return [x for h,x in projects_h(txt)]
+def projects_h(txt):
   L=[l.strip() for l in txt.split('\n')]
-  out=[];on=False
+  out=[];on=False;hdr=''
   for l in L:
     if not l: continue
-    if is_hdr(l): on=True; continue
+    if is_hdr(l): on=True; hdr=strip_hdr(l); continue
     if not on: continue
     if is_end(l): on=False; continue
-    newitem=YEAR_START.match(l) or l[0] in '〈《「【•●‧-' or (out and re.search(r'[。）)\]】]\s*$',out[-1]))
-    if out and not newitem and len(out[-1])<400: out[-1]+=l; continue
-    out.append(l)
+    newitem=YEAR_START.match(l) or l[0] in '〈《「【•●‧-' or (out and re.search(r'[。）)\]】]\s*$',out[-1][1]))
+    if out and not newitem and len(out[-1][1])<400: out[-1]=(out[-1][0],out[-1][1]+l); continue
+    out.append((hdr,l))
   # split glued items like "...計畫102-103年 《..."
   res=[]
-  for x in out:
+  for h,x in out:
     parts=re.split(r'(?<=[畫劃辦助案）)」》])\s*(?=\d{2,3}(?:-\d{2,3})?年\s*[《「〈])',x)
     for q in parts:
-      res+=[r for r in re.split(r'(?<=[司會心處局部院）)。])\s*(?=[\u4e00-\u9fff、.．]{2,24}\s*[（(]\d{4})',q) if r]
-  return [x for x in res if len(x)>=12 and ITEM_OK.search(x) and not ITEM_BAD.search(x)]
+      res+=[(h,r) for r in re.split(r'(?<=[司會心處局部院）)。])\s*(?=[\u4e00-\u9fff、.．]{2,24}\s*[（(]\d{4})',q) if r]
+  return [(h,x) for h,x in res if len(x)>=12 and ITEM_OK.search(x) and not ITEM_BAD.search(x)]
 if __name__=='__main__':
   for f in sorted(glob.glob('data/pages/*.txt')):
     p=projects(open(f,encoding='utf-8').read())

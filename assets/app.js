@@ -38,13 +38,13 @@
   document.addEventListener('scroll', hideTip, { passive: true });
 
   const CATS = D.projCats;
-  const MAINCATS = ['國科會', '客委會', '文化部', '教育部', '產學合作'];
+  const MAINCATS = ['國科會', '客委會', '文化部', '教育部'];
   const isActive = p => p.status === 'active';
   const statusLabel = p => p.status === 'retired' ? '退休' : (p.status === 'left' ? '離職' : (p.status === 'former' ? '非現任' : ''));
   const ACT = P.filter(isActive);
   // aggregates
   function agg(list) {
-    const a = { n: list.length, withHakkaPub: 0, withHakkaAny: 0, pubs: 0, hakkaPubs: 0, hakkaPubs5y: 0, projects: 0, hakkaProjects: 0, hakkaProjAmt: 0, medals: 0, honors: 0, self: 0, ind: 0, cat: {} };
+    const a = { n: list.length, withHakkaPub: 0, withHakkaAny: 0, pubs: 0, hakkaPubs: 0, hakkaPubs5y: 0, projects: 0, hakkaProjects: 0, hakkaProjAmt: 0, medals: 0, honors: 0, self: 0, ind: 0, iuc: 0, cat: {} };
     CATS.forEach(c => a.cat[c] = 0);
     list.forEach(p => {
       const s = p.stats;
@@ -56,6 +56,7 @@
       if (p.medals.length) a.medals++;
       if (p.medals.length || (p.awards || []).length) a.honors++;
       CATS.forEach(c => a.cat[c] += (s.hakkaProjByCat || {})[c] || 0);
+      a.iuc += s.hakkaIUC || 0;
       if (p.heritage && p.heritage.self) a.self++;
     });
     return a;
@@ -84,7 +85,7 @@
         <div class="kpi"><div class="v">${all.n}</div><div class="l">現任專任教師</div><div class="s">3 校 · ${new Set(P.map(p => p.school + p.dept)).size} 個系所</div></div>
         <div class="kpi"><div class="v">${all.withHakkaPub}</div><div class="l">有客家相關著作的教師</div><div class="s">占 ${pct(all.withHakkaPub, all.n)}%</div></div>
         <div class="kpi"><div class="v">${fmt(all.hakkaPubs)}</div><div class="l">客家相關著作（篇／冊）</div><div class="s">占全部登錄著作 ${pct(all.hakkaPubs, all.pubs)}%</div></div>
-        <div class="kpi"><div class="v">${fmt(all.hakkaProjects)}</div><div class="l">客家相關研究計畫（件）</div><div class="s">國科會 ${all.cat['國科會']} · 客委會 ${all.cat['客委會']} · 其他 ${all.hakkaProjects - all.cat['國科會'] - all.cat['客委會']}</div></div>
+        <div class="kpi"><div class="v">${fmt(all.hakkaProjects)}</div><div class="l">客家相關研究計畫（件）</div><div class="s">國科會 ${all.cat['國科會']} · 客委會 ${all.cat['客委會']} · 其他 ${all.hakkaProjects - all.cat['國科會'] - all.cat['客委會']}｜其中產學合作／委辦 ${all.iuc}</div></div>
       </div>
     </section>`;
 
@@ -100,6 +101,8 @@
           <dt>近五年（2021–）客家著作</dt><dd>${fmt(a.hakkaPubs5y)}</dd>
           <dt>客家相關研究計畫</dt><dd>${a.hakkaProjects} 件</dd>
           ${MAINCATS.map(c => `<dt style="padding-left:12px;font-size:14px">└ ${c}</dt><dd style="font-weight:500">${a.cat[c]}</dd>`).join('')}
+          <dt style="padding-left:12px;font-size:14px">└ 其他機關、企業／法人等</dt><dd style="font-weight:500">${a.hakkaProjects - MAINCATS.reduce((x, c) => x + a.cat[c], 0)}</dd>
+          <dt>其中產學合作／委辦案</dt><dd>${a.iuc} 件</dd>
           <dt>獲客家貢獻獎／專業獎章</dt><dd>${a.honors} 人</dd>
           <dt>退休／離職教師（另列）</dt><dd>${P.filter(p => p.school === s && !isActive(p)).length} 人</dd>
         </dl>
@@ -114,10 +117,10 @@
       <div class="chart" id="c3" style="margin-top:14px"></div></section>`;
 
     h += `<section class="section"><div class="section-head"><h2>客家相關計畫的來源</h2><p>現任專任教師為主持人或共同主持人、主題與客家／客語／客庄相關的計畫件數</p></div>
-      <div class="table-wrap"><table><thead><tr><th>學校</th>${CATS.map(c => `<th class="num">${c}</th>`).join('')}<th class="num">合計</th></tr></thead><tbody>
-      ${ORDER.map(s => { const a = agg(bySchool(s)); return `<tr tabindex="0" data-href="#/faculty?school=${s}"><td><span class="dot" style="--c:${SC[s]}"></span>${SCH[s].short}</td>${CATS.map(c => `<td class="num">${a.cat[c] || '·'}</td>`).join('')}<td class="num"><b>${a.hakkaProjects}</b></td></tr>`; }).join('')}
-      <tr style="cursor:default"><td><b>三校合計</b></td>${CATS.map(c => `<td class="num"><b>${all.cat[c] || '·'}</b></td>`).join('')}<td class="num"><b>${all.hakkaProjects}</b></td></tr>
-      </tbody></table></div><p class="note" style="color:var(--muted);font-size:13px;margin:8px 0 0">來源：國科會研究人才查詢（國科會）、政府研究資訊系統 GRB（客委會、文化部、教育部、地方政府等）、中央大學教師履歷平台（高教深耕、產學合作、其他補助）、各系所教師個人頁。跨來源重複的計畫只算一次。</p></section>`;
+      <div class="table-wrap"><table><thead><tr><th>學校</th>${CATS.map(c => `<th class="num">${c}</th>`).join('')}<th class="num">合計</th><th class="num">其中產學合作／委辦</th></tr></thead><tbody>
+      ${ORDER.map(s => { const a = agg(bySchool(s)); return `<tr tabindex="0" data-href="#/faculty?school=${s}"><td><span class="dot" style="--c:${SC[s]}"></span>${SCH[s].short}</td>${CATS.map(c => `<td class="num">${a.cat[c] || '·'}</td>`).join('')}<td class="num"><b>${a.hakkaProjects}</b></td><td class="num">${a.iuc}</td></tr>`; }).join('')}
+      <tr style="cursor:default"><td><b>三校合計</b></td>${CATS.map(c => `<td class="num"><b>${all.cat[c] || '·'}</b></td>`).join('')}<td class="num"><b>${all.hakkaProjects}</b></td><td class="num"><b>${all.iuc}</b></td></tr>
+      </tbody></table></div><p class="note" style="color:var(--muted);font-size:13px;margin:8px 0 0">來源：國科會研究人才查詢（國科會）、政府研究資訊系統 GRB（客委會、文化部、教育部、地方政府等）、中央大學教師履歷平台（高教深耕、產學合作、其他補助）、各系所教師個人頁。依委託或補助機關分欄；「其中產學合作／委辦」另計委辦、委託、勞務或標示為產學合作的計畫（不論機關）。跨來源重複的計畫只算一次。</p></section>`;
 
     h += `<section class="section"><div class="section-head"><h2>系所一覽</h2><p>依客家相關著作數排序，點選列進入該系所名錄</p></div><div class="table-wrap"><table><thead><tr>
       <th>系所</th><th class="num">教師</th><th class="num">有客家著作</th><th class="num">客家著作</th><th class="num hide-sm">客家著作占比</th><th class="num">客家計畫</th></tr></thead><tbody>`;
@@ -246,9 +249,9 @@
     const hp = p.pubs.filter(x => x.hakka), ip = p.pubs.filter(x => x.ind);
     const hj = p.projects.filter(x => x.hakka), ij = p.projects.filter(x => x.ind);
     const oj = (p.otherProjects || []), hoj = oj.filter(x => x.hakka), ioj = oj.filter(x => x.ind);
-    const oLi = (x, re) => `<li><span class="yr">${x.year ? x.year + ' 年' : ''}</span><div><div class="t">${hl(x.title, re)}</div><div class="s">${esc(x.src === '系所個人頁' ? '' : x.agency)}${x.amount ? ` <span class="amt">· NT$ ${fmt(x.amount)}</span>` : ''} · 來源：<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.src === 'GRB' ? '政府研究資訊系統 GRB' : x.src)} ↗</a></div><div class="k">${(x.kw.length ? x.kw : x.ikw || []).map(k => `<span class="tag">${esc(k)}</span>`).join('')}</div></div></li>`;
+    const oLi = (x, re) => `<li><span class="yr">${x.year ? x.year + ' 年' : ''}</span><div><div class="t">${hl(x.title, re)}</div><div class="s">${esc(x.src === '系所個人頁' ? '' : x.agency)}${x.amount ? ` <span class="amt">· NT$ ${fmt(x.amount)}</span>` : ''} · 來源：${(x.srcs || [x.src]).map((sr, i) => `<a href="${esc((x.urls || [x.url])[i])}" target="_blank" rel="noopener">${esc(sr === 'GRB' ? '政府研究資訊系統 GRB' : sr)} ↗</a>`).join('、')}</div><div class="k">${x.kind === '產學合作' ? '<span class="tag iuc">產學合作／委辦</span>' : ''}${(x.kw.length ? x.kw : x.ikw || []).map(k => `<span class="tag">${esc(k)}</span>`).join('')}</div></div></li>`;
     const pubLi = (x, re) => `<li><span class="yr">${esc(x.ym || '')}</span><div><div class="t">${hl(x.title, re)}</div><div class="s">${esc(x.type)}${x.source ? ' · ' + hl(x.source, re) : ''}${x.authors ? ' · ' + esc(x.authors) : ''}</div><div class="k">${(x.kw.length ? x.kw : x.ikw || []).map(k => `<span class="tag">${esc(k)}</span>`).join('')}</div></div></li>`;
-    const projLi = (x, re) => `<li><span class="yr">${x.year ? x.year + ' 年度' : ''}</span><div><div class="t">${hl(x.title, re)}</div><div class="s">${esc(x.type)} · 學門：${esc(x.field)} · ${esc(x.role)} <span class="amt">· NT$ ${fmt(x.amount)}</span></div><div class="k">${(x.kw.length ? x.kw : x.ikw || []).map(k => `<span class="tag">${esc(k)}</span>`).join('')}</div></div></li>`;
+    const projLi = (x, re) => `<li><span class="yr">${x.year ? x.year + ' 年度' : ''}</span><div><div class="t">${hl(x.title, re)}</div><div class="s">${esc(x.type)} · 學門：${esc(x.field)} · ${esc(x.role)} <span class="amt">· NT$ ${fmt(x.amount)}</span></div><div class="k">${x.kind === '產學合作' ? '<span class="tag iuc">產學合作／委辦</span>' : ''}${(x.kw.length ? x.kw : x.ikw || []).map(k => `<span class="tag">${esc(k)}</span>`).join('')}</div></div></li>`;
     const her = p.heritage || {};
     let h = `<div class="crumb"><a href="#/">總覽</a> / <a href="#/faculty?school=${p.school}">${SCH[p.school].name}</a> / <a href="#/faculty?school=${p.school}&dept=${encodeURIComponent(p.dept)}">${esc(p.dept)}</a></div>
       <div class="p-head"><div style="flex:1;min-width:240px"><h1>${esc(p.name)}</h1>
@@ -258,7 +261,7 @@
         <div class="kpi"><div class="v">${s.hakkaPubs}</div><div class="l">客家相關著作</div><div class="s">全部 ${s.pubs} 筆</div></div>
         <div class="kpi"><div class="v">${s.share == null ? '—' : s.share + '%'}</div><div class="l">客家著作占比</div></div>
         <div class="kpi"><div class="v">${s.hakkaPubs5y}</div><div class="l">近五年客家著作</div><div class="s">2021 年以後</div></div>
-        <div class="kpi"><div class="v">${s.hakkaProjects}</div><div class="l">客家相關研究計畫</div><div class="s">${CATS.filter(c => s.hakkaProjByCat[c]).map(c => c + ' ' + s.hakkaProjByCat[c]).join(' · ') || '—'}</div></div>
+        <div class="kpi"><div class="v">${s.hakkaProjects}</div><div class="l">客家相關研究計畫</div><div class="s">${CATS.filter(c => s.hakkaProjByCat[c]).map(c => c + ' ' + s.hakkaProjByCat[c]).join(' · ') || '—'}${s.hakkaIUC ? `｜產學合作／委辦 ${s.hakkaIUC}` : ''}</div></div>
         <div class="kpi"><div class="v">${s.hakkaProjAmt ? fmt(Math.round(s.hakkaProjAmt / 1e4)) : '0'}</div><div class="l">客家計畫核定經費（萬元）</div></div>
       </div>`;
 
@@ -309,7 +312,7 @@
       <li><b>客委會、文化部、教育部、地方政府及其他政府機關</b>：政府研究資訊系統（GRB）中以該教師為計畫主持人的計畫，依 GRB 的「計畫主管機關」分類。GRB 以人員代碼區分同名者，只保留與本校系所執行計畫為同一人代碼的資料。GRB 中的國科會／科技部計畫已由國科會資料涵蓋，不重複計入。</li>
       <li><b>產學合作、教育部高教深耕等校內登錄計畫</b>：中央大學「教師履歷平台」的產學合作計畫、高教深耕計畫與其他補助（其他補助未標示委託機關，歸為「其他」）。</li>
       <li><b>系所個人頁</b>：聯合大學三系所、陽明交大人文社會學系與傳播與科技學系教師個人頁中的「研究計畫」「產學合作計畫」等段落（中央大學系所網站沒有教師個人頁，改用教師履歷平台），依文中的委託／補助機關分類。</li>
-      <li><b>產學合作</b>的認定：標示為產學合作，或委託單位為企業、財團法人、基金會、協會者；國科會產學合作類計畫歸在「國科會」。</li>
+      <li><b>產學合作／委辦</b>：與委託機關分開計算。凡教師列於「產學合作」段落、標示委辦／委託／勞務，或委託單位為企業、財團法人、基金會、協會的計畫，都標為產學合作／委辦（例如客家委員會委辦的客庄村史輔導、督導訪查計畫），但標明「學術補助」者除外。國科會產學合作類計畫也計入。</li>
     </ul>
     <p>不同來源的同一計畫（標題相同或相互包含）只算一次。限制：陽明交大學術成果平台有機器人驗證、聯合大學沒有公開的計畫查詢系統，因此兩校的產學合作計畫取自教師個人頁；未在個人頁列出計畫的教師，產學合作可能低估。</p>
     <h2>4. 「客家相關」的判定</h2>

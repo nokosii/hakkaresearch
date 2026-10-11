@@ -30,19 +30,20 @@ def grade_of(text,name):
   return best[0] if best else ''
 
 import sys as _sys; _sys.path.insert(0,f'{BASE}/tools')
-from pageproj import projects as page_projects
+from pageproj import projects as page_projects, projects_h as page_projects_h
+import difflib
 from bs4 import BeautifulSoup
-CATS=['國科會','客委會','文化部','教育部','產學合作','地方政府','其他政府機關','校內計畫','其他']
+CATS=['國科會','客委會','文化部','教育部','地方政府','其他政府機關','企業／法人','校內計畫','其他']
 def agency_cat(a):
   a=a or ''
-  if re.search(r'產學',a): return '產學合作'
+  if re.search(r'產學',a): return '企業／法人'
   if re.search(r'國科會|國家科學及技術委員會|科技部|國家科學委員會|\bNSC|MOST|NSTC',a): return '國科會'
   if re.search(r'縣政府|市政府|公所|客家事務局|縣客家|市客家|文化局|教育局|文觀局|研考會|縣立|市立|議會',a): return '地方政府'
   if re.search(r'客家委員會|客委會|客家文化發展中心|客發中心|客家文化中心|客家公共傳播',a): return '客委會'
   if re.search(r'文化部|文建會|文化資產局|臺灣文學館|台灣文學館|國家人權博物館|國立.{0,6}博物館|國家電影|國立傳統藝術中心|國家文化記憶庫|國立.{0,4}美術館|國立歷史博物館',a): return '文化部'
   if re.search(r'教育部|高等教育深耕|高教深耕|教學實踐|大學社會責任|USR|國家教育研究院',a): return '教育部'
   if re.search(r'行政院|經濟部|勞動部|勞工委員會|內政部|衛生福利部|農業部|農委會|交通部|外交部|僑務委員會|原住民族委員會|國家發展委員會',a): return '其他政府機關'
-  if re.search(r'公司|企業|基金會|財團法人|社團法人|協會|學會|農會|銀行|股份|合作社|廣播電台|電視台|有限|工研院|資策會|顧問',a): return '產學合作'
+  if re.search(r'公司|企業|基金會|財團法人|社團法人|協會|學會|農會|銀行|股份|合作社|廣播電台|電視台|有限|工研院|資策會|顧問',a): return '企業／法人'
   if re.search(r'校內|本校|協成型|校級|大學.{0,6}(研究計畫|補助)|學院.{0,4}計畫',a): return '校內計畫'
   if re.search(r'部|委員會|署|局|處|院|中心|館|政府',a): return '其他政府機關'
   return '其他'
@@ -90,7 +91,7 @@ for line in open(f'{BASE}/data/roster.tsv',encoding='utf-8'):
     try: yy=int(yr)
     except: yy=None
     ik=[] if hit else sorted(set(x.group(0) for x in IND.finditer(ttl)))
-    projs.append({'year':yy,'type':kind,'field':field,'title':ttl,'role':role,'amount':a,'hakka':hit,'kw':kw,'ind':bool(ik),'ikw':ik})
+    projs.append({'kind':('產學合作' if '產學' in kind else '研究補助／委託'),'year':yy,'type':kind,'field':field,'title':ttl,'role':role,'amount':a,'hakka':hit,'kw':kw,'ind':bool(ik),'ikw':ik})
   # nstc title
   ntitle=''; norg=''
   for b in d.get('basic',[]):
@@ -110,33 +111,48 @@ for line in open(f'{BASE}/data/roster.tsv',encoding='utf-8'):
         seen.add(l); supp.append(l)
 
   # ---------- other (non-NSTC-talent) projects ----------
-  other=[]; keys=set(normt(p['title'])[:24] for p in projs)
-  def add(src,agency,cat,year,title,amount,url,extra=''):
-    k=normt(title)[:24]
+  other=[]
+  nst=[(normt(p['title']),p['year']) for p in projs]
+  def similar(t1,t2):
+    if not t1 or not t2: return False
+    if len(t1)>=10 and len(t2)>=10 and (t1 in t2 or t2 in t1): return True
+    if t1[:4]!=t2[:4]: return False
+    sm=difflib.SequenceMatcher(None,t1,t2,autojunk=False)
+    m=sum(b.size for b in sm.get_matching_blocks())
+    return m>=0.9*min(len(t1),len(t2)) and min(len(t1),len(t2))>=10
+  def add(src,agency,cat,year,title,amount,url,extra='',kind=None,core=None):
+    core=core or title
+    k=normt(core)
     if not k or len(k)<6: return
     if cat=='國科會': return
-    nt=normt(title)
-    for kk in keys:
-      if kk==k or (len(kk)>=10 and kk in nt): return
-    for kk,yy in seen_o:
-      if (kk==k and (yy==year or src!='GRB')) or (src!='GRB' and len(kk)>=10 and kk in nt): return
-    seen_o.add((k,year))
+    for t,y in nst:
+      if similar(k,t) and (not year or not y or abs((y or 0)-(year or 0))<=1): return
+    for o in other:
+      ytol=0 if src==o['src'] else 1
+      if similar(k,o['_k']) and (not year or not o['year'] or abs(o['year']-year)<=ytol):
+        # merge: keep first record, enrich kind / sources
+        if kind=='產學合作': o['kind']='產學合作'
+        if src not in o['srcs']: o['srcs'].append(src); o['urls'].append(url)
+        return
     txt=(title or '')+' '+(extra or '')
     kw=sorted(set(x.group(0) for x in HK.finditer(txt)))
     reason=list(kw)
     if cat=='客委會' or re.search('客家',agency or ''): reason=['主管機關：'+(agency or cat)]+reason
     hit=bool(reason)
     ik=[] if hit else sorted(set(x.group(0) for x in IND.finditer(txt)))
-    other.append({'src':src,'agency':agency,'cat':cat,'year':year,'title':title,'amount':amount,'url':url,'hakka':hit,'kw':reason,'ind':bool(ik),'ikw':ik})
-  seen_o=set()
+    other.append({'_k':k,'src':src,'srcs':[src],'urls':[url],'agency':agency,'cat':cat,'year':year,'title':title,'amount':amount,'url':url,
+                  'kind':kind or ('產學合作' if cat=='企業／法人' else '研究補助／委託'),'hakka':hit,'kw':reason,'ind':bool(ik),'ikw':ik})
+  IUC=re.compile(r'產學|委辦|委託|勞務|採購|輔導計畫|督導|徵集|顧問|服務計畫')
   gf=f'{BASE}/data/grb/{sch}_{name}.json'
   if os.path.exists(gf):
     g=json.load(open(gf,encoding='utf-8'))
     for o in g.get('projects',[]):
       try: amt=int(float(o.get('amount') or 0)*1000)
       except: amt=0
-      add('GRB',o.get('agency',''),agency_cat(o.get('agency','')),roc2ad(o.get('year')),o.get('title'),amt,
-          f"https://www.grb.gov.tw/search/planDetail?id={o['id']}",(o.get('keyword') or ''))
+      t=o.get('title') or ''
+      add('GRB',o.get('agency',''),agency_cat(o.get('agency','')),roc2ad(o.get('year')),t,amt,
+          f"https://www.grb.gov.tw/search/planDetail?id={o['id']}",(o.get('keyword') or ''),
+          kind=('產學合作' if re.search(r'產學|委辦|委託',t) else None))
   itf=f'{BASE}/data/iteacher/{name}.html'
   if sch=='ncu' and os.path.exists(itf):
     iturl=open(f'{BASE}/data/iteacher/{name}.url').read().strip()
@@ -151,16 +167,24 @@ for line in open(f'{BASE}/data/roster.tsv',encoding='utf-8'):
         if not sp: continue
         t=sp[0].get_text(' ',strip=True); dt=sp[1].get_text(strip=True) if len(sp)>1 else ''
         kwx=sp[2].get_text(' ',strip=True) if len(sp)>2 else ''
-        cat={'高教深耕計畫':'教育部','產學合作計畫統計':'產學合作'}.get(cur,'其他')
+        cat={'高教深耕計畫':'教育部'}.get(cur,'其他')
         ag={'高教深耕計畫':'教育部高等教育深耕計畫（校內登錄）','產學合作計畫統計':'產學合作計畫（中央大學教師履歷平台）','其他補助':'其他補助（中央大學教師履歷平台，未標示委託機關）'}.get(cur,cur)
-        add('中央大學教師履歷平台',ag,cat,roc2ad(dt[:7]) if dt else None,t,0,iturl,kwx)
+        add('中央大學教師履歷平台',ag,cat,roc2ad(dt[:7]) if dt else None,t,0,iturl,kwx,
+            kind=('產學合作' if cur=='產學合作計畫統計' or IUC.search(t) else None))
   pf=f'{BASE}/data/pages/{sch}_{name}.txt'
   if os.path.exists(pf):
-    for l in page_projects(open(pf,encoding='utf-8').read()):
-      m=re.search(r'(19|20)\d\d',l); yr=int(m.group(0)) if m else None
-      if not m:
-        m2=re.match(r'\s*(\d{2,3})\s*(學年度|年度|年)',l); yr=roc2ad(m2.group(1)) if m2 else None
-      add('系所個人頁',l,line_cat(l),yr,l,0,url)
+    for hdr,l in page_projects_h(open(pf,encoding='utf-8').read()):
+      m=re.match(r'\s*[\(（]?(\d{2,3})\s*(?:[-~～]\s*\d{2,3})?\s*(學年度|年度|年)',l)
+      if m: yr=roc2ad(m.group(1))
+      else:
+        m=re.search(r'(19|20)\d\d',l); yr=int(m.group(0)) if m else None
+      cm=re.search(r'[《「〈＜<]([^》」〉＞>]{6,})[》」〉＞>]',l)
+      core=cm.group(1) if cm else re.sub(r'^\s*[^\s(（]{0,40}?[\(（]\d{4}(?:[-~]\d{2,4})?[\)）]。?|^\s*[\d/.~\-–\s年月度學]+','',l).split('，')[0].split(',')[0]
+      c=line_cat(l)
+      rest=l.replace(core,'')
+      kind='產學合作' if ((IUC.search(rest) or c=='企業／法人' or '產學' in hdr) and not re.search(r'學術補助|補助計畫|獎補助|補助專題|高教深耕|高等教育深耕',rest)) else None
+      add('系所個人頁',l,c,yr,l,0,url,kind=kind,core=core)
+  for o in other: o.pop('_k',None)
   supp=[l for l in supp if not any(l[:40] in (o['title'] or '') for o in other if o['src']=='系所個人頁')]
   medals=[]
   for m in MEDALS:
@@ -182,7 +206,7 @@ for line in open(f'{BASE}/data/roster.tsv',encoding='utf-8'):
     'nstcProj':(f"{NSTC}?action=initRsm17new&rsNo={d['rsNo']}&LANG=chi" if d.get('rsNo') else None),
     'pubs':pubs,'projects':projs,'otherProjects':other,'status':STATUS_OVERRIDE.get(name) or ('left' if ('離職' in title or '非現任' in title) else ('retired' if ('退休' in title or '榮譽' in title) else 'active')),'supp':supp,'medals':medals,'awards':awards,
     'heritage':her,
-    'stats':{'pubs':len(pubs),'hakkaPubs':len(hp_),'hakkaPubs5y':len(rec5),'projects':len(projs),'hakkaProjects':len(hj)+len(ho),'hakkaNstcProjects':len(hj),'hakkaOtherProjects':len(ho),'otherProjects':len(other),'hakkaProjByCat':bycat,
+    'stats':{'pubs':len(pubs),'hakkaPubs':len(hp_),'hakkaPubs5y':len(rec5),'projects':len(projs),'hakkaProjects':len(hj)+len(ho),'hakkaNstcProjects':len(hj),'hakkaOtherProjects':len(ho),'otherProjects':len(other),'hakkaProjByCat':bycat,'hakkaIUC':sum(1 for p in hj+ho if p.get('kind')=='產學合作'),'iuc':sum(1 for p in projs+other if p.get('kind')=='產學合作'),
              'hakkaProjAmt':sum(p['amount'] for p in hj)+sum(p['amount'] for p in ho),'supp':len(supp),'indPubs':sum(1 for p in pubs if p['ind']),'indProjects':sum(1 for p in projs if p['ind']),
              'share':(round(len(hp_)/len(pubs)*100,1) if pubs else None)}
   })

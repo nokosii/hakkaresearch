@@ -173,3 +173,6 @@ details.all summary{cursor:pointer;color:var(--indigo-2);font-size:15px}
 :root[data-theme="dark"] .tag.award{background:#2a2136;color:#c9b3e6;border-color:#5b4580}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.award{background:#2a2136;color:#c9b3e6;border-color:#5b4580}}
 td.rank{color:var(--muted);font-size:14px;width:3em}
+.tag.iuc{border-color:#2f7d6d;color:#1f6b5c;background:#e6f4f0}
+:root[data-theme="dark"] .tag.iuc{background:#173029;color:#8fd6c4;border-color:#2f6b5d}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.iuc{background:#173029;color:#8fd6c4;border-color:#2f6b5d}}
