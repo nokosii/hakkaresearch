@@ -35,15 +35,20 @@ from bs4 import BeautifulSoup
 CATS=['國科會','客委會','文化部','教育部','產學合作','地方政府','其他政府機關','校內計畫','其他']
 def agency_cat(a):
   a=a or ''
+  if re.search(r'產學',a): return '產學合作'
   if re.search(r'國科會|國家科學及技術委員會|科技部|國家科學委員會|\bNSC|MOST|NSTC',a): return '國科會'
-  if re.search(r'產學|公司|企業|基金會|協會|學會|農會|銀行|股份|合作社|商業|廣播電台|電視台|有限',a): return '產學合作'
-  if re.search(r'縣政府|市政府|公所|客家事務局|縣客家|市客家|文化局|教育局|縣立|市立|議會',a): return '地方政府'
+  if re.search(r'縣政府|市政府|公所|客家事務局|縣客家|市客家|文化局|教育局|文觀局|研考會|縣立|市立|議會',a): return '地方政府'
   if re.search(r'客家委員會|客委會|客家文化發展中心|客發中心|客家文化中心|客家公共傳播',a): return '客委會'
-  if re.search(r'文化部|文建會|文化資產局|臺灣文學館|台灣文學館|國家人權博物館|國立.{0,6}博物館|國家電影|國立傳統藝術中心|國家文化記憶庫|蒙藏|國立.{0,4}美術館|國立歷史博物館',a): return '文化部'
-  if re.search(r'教育部|高等教育深耕|高教深耕|教學實踐|大學社會責任|USR|國家教育研究院|國家語言|原住民族委員會.*教育',a): return '教育部'
+  if re.search(r'文化部|文建會|文化資產局|臺灣文學館|台灣文學館|國家人權博物館|國立.{0,6}博物館|國家電影|國立傳統藝術中心|國家文化記憶庫|國立.{0,4}美術館|國立歷史博物館',a): return '文化部'
+  if re.search(r'教育部|高等教育深耕|高教深耕|教學實踐|大學社會責任|USR|國家教育研究院',a): return '教育部'
+  if re.search(r'行政院|經濟部|勞動部|勞工委員會|內政部|衛生福利部|農業部|農委會|交通部|外交部|僑務委員會|原住民族委員會|國家發展委員會',a): return '其他政府機關'
+  if re.search(r'公司|企業|基金會|財團法人|社團法人|協會|學會|農會|銀行|股份|合作社|廣播電台|電視台|有限|工研院|資策會|顧問',a): return '產學合作'
   if re.search(r'校內|本校|協成型|校級|大學.{0,6}(研究計畫|補助)|學院.{0,4}計畫',a): return '校內計畫'
   if re.search(r'部|委員會|署|局|處|院|中心|館|政府',a): return '其他政府機關'
   return '其他'
+def line_cat(l):
+  c=agency_cat(l[-45:])
+  return c if c!='其他' else agency_cat(l)
 def normt(t): return re.sub(r'[\W_（）()「」《》〈〉：:，,、\s]+','',t or '').lower()
 def roc2ad(y):
   try: y=int(str(y)[:3]) if len(str(y))>=7 else int(y)
@@ -154,7 +159,7 @@ for line in open(f'{BASE}/data/roster.tsv',encoding='utf-8'):
       m=re.search(r'(19|20)\d\d',l); yr=int(m.group(0)) if m else None
       if not m:
         m2=re.match(r'\s*(\d{2,3})\s*(學年度|年度|年)',l); yr=roc2ad(m2.group(1)) if m2 else None
-      add('系所個人頁',l,agency_cat(l),yr,l,0,url)
+      add('系所個人頁',l,line_cat(l),yr,l,0,url)
   supp=[l for l in supp if not any(l[:40] in (o['title'] or '') for o in other if o['src']=='系所個人頁')]
   medals=[]
   for m in MEDALS:
@@ -174,7 +179,7 @@ for line in open(f'{BASE}/data/roster.tsv',encoding='utf-8'):
     'profile':url,'nstc':(f"{NSTC}?action=initBasic&rsNo={d['rsNo']}&LANG=chi" if d.get('rsNo') else None),
     'nstcPubs':(f"{NSTC}?action=initRsm05&rsNo={d['rsNo']}&LANG=chi" if d.get('rsNo') else None),
     'nstcProj':(f"{NSTC}?action=initRsm17new&rsNo={d['rsNo']}&LANG=chi" if d.get('rsNo') else None),
-    'pubs':pubs,'projects':projs,'otherProjects':other,'status':('former' if '非現任' in title else ('retired' if ('退休' in title or '榮譽' in title) else 'active')),'supp':supp,'medals':medals,'awards':awards,
+    'pubs':pubs,'projects':projs,'otherProjects':other,'status':('left' if ('離職' in title or '非現任' in title) else ('retired' if ('退休' in title or '榮譽' in title) else 'active')),'supp':supp,'medals':medals,'awards':awards,
     'heritage':her,
     'stats':{'pubs':len(pubs),'hakkaPubs':len(hp_),'hakkaPubs5y':len(rec5),'projects':len(projs),'hakkaProjects':len(hj)+len(ho),'hakkaNstcProjects':len(hj),'hakkaOtherProjects':len(ho),'otherProjects':len(other),'hakkaProjByCat':bycat,
              'hakkaProjAmt':sum(p['amount'] for p in hj)+sum(p['amount'] for p in ho),'supp':len(supp),'indPubs':sum(1 for p in pubs if p['ind']),'indProjects':sum(1 for p in projs if p['ind']),

@@ -1,0 +1,91 @@
+跳到主要內容
+跳到頁尾
+檔案資源
+網站地圖
+高中生專區
+English
+關於傳科
+活動/公告
+學士班
+碩士班
+系所成員
+傳科生活
+國際交流
+首頁
+/
+系所成員
+/
+專任師資
+/
+何俊霆
+何俊霆
+助理教授
+專業領域
+計算方法 / 政治傳播 / 民族主義
+聯絡方式
+
+分機：
+研究室：HK231
+電郵 : jcho@nycu.edu.tw
+個人網站：https://justinchuntingho.github.io/
+GitHub：https://github.com/justinchuntingho
+ORCID：0000-0002-7884-1059
+
+學歷
+2021 英國愛丁堡大學（University of Edinburgh）博士
+2013 英國倫敦政治經濟學院（London School of Economics and Political Science） 碩士
+2012 香港中文大學 學士
+經歷
+2025至今 助理教授, 國立陽明交通大學傳播與科技學系
+2023-2025 博士後研究員, 阿姆斯特丹大學阿姆斯特丹傳播學院
+2022-2023 博士後研究員, 中央研究院
+2020-2022 博士後研究員, 巴黎政治學院
+著作、計劃案與榮譽
+
+【著作】
+
+Ho, J.C. (2025) Computational Methods and Nationalism Studies. Studies on National Movements 14(1).
+Stier, S., Froio, C. & Ho, J.C. (2024) Mainstreaming the populist radical right? Online news exposure and voting behavior in the 2019 European Parliament election. European Political Science Review (16)1: pp. 1–17. [SSCI]
+Ho, J.C. (2024) Hong Kong Anti-colonial Nationalism during the Chinese Language Campaign. The China Quarterly 258: pp. 384–399. [SSCI]
+Ho, J.C. & Chan, C. (2023) Evaluating Transferability in Multilingual Text Analyses. Computational Communication Research 5(2).
+Ho, J.C. (2023) The Internationalism of Stateless Nations: The case of Hong Kong. Nations and Nationalism 29(1): pp. 346–363. [SSCI]
+Ho, J.C. (2022) Understanding Hong Kong Nationalism: A Topic Network Approach. Nations and Nationalism 28(4): pp. 1249–1266. [SSCI]
+Urman, A., Ho, J.C. & Katz, S. (2021) Analyzing protest mobilization on Telegram: The case of 2019 Anti-Extradition Bill movement in Hong Kong. PLOS One 16(10): e0256675. [SCIE]
+Barrie, C. & Ho, J.C. (2021) academictwitteR: an R package to access the Twitter Academic Research Product Track v2 API endpoint. Journal of Open Source Software 6(62). The Open Journal: 3272.
+Brownlie, J., Ho, J.C., Dunne, N., Fernández, N. & Squirrell, T. (2021) Troubling content: Guiding discussion of death by suicide on social media. Sociology of Health and Illness 43(4), pp. 607-623. [SSCI]
+Ho, J.C. (2020) How Biased is the Sample? Reverse Engineering the Ranking Algorithm of Facebook’s Graph API. Big Data & Society 7(1), pp. 1-15. [SSCI]
+Ho, J.C. (2019) Assessing the Bias of Facebook’s Graph API. ACM Hypertext and Social Media 2019.
+Soldner, F., Ho, J.C., Makhortykh, M., Van der Vegt, I.W.J., Mozes, M. & Kleinberg, B. (2019) Uphill from here: Sentiment patterns in videos from left- and right-wing YouTube news channels. NLP+CSS at NAACL 2019.
+
+【Other Publications】
+
+Ho, J.C. (2025) Computational Methods and Nationalism Studies. the State of Nationalism (SoN). Accessible: https://stateofnationalism.eu/article/computational-methods-and-nationalism-studies/
+Ho, J.C. (2022) Scotland: A Distinct Political Community in the United Kingdom. In: Fong, C. & Ichijo, A. (eds). The Routledge Handbook of Comparative Territorial Autonomies. Milton Park: Routledge.
+Ho, J.C. (2022) Using Computational Text Analysis With Social Media Text. SAGE Research Methods: Doing Research Online. London: Sage.
+Barrie, C. & Ho, J.C. (2022) Using the Twitter Academic API With R for Social Science Research. SAGE Research Methods: Doing Research Online. London: Sage.
+Davidson, E., Ho, J.C. & Jamieson, L. (2019) Computational text analysis using R in Big Qual data: lessons from a feasibility study looking at care and intimacy. In: Weller, S., Edwards, R., Jamieson, L. & Davidson, E. (eds). Analysing large volumes of complex qualitative data – Reflections from a group of international experts. NCRM Working Paper. Accessible: http://eprints.ncrm.ac.uk/4266/
+Ho, J.C. (2017) Book review: Dynamics of National Identity: Media and Societal Factors of What We Are. Nations and Nationalism 23(4), pp. 1004–1006.
+
+【國際研究計畫】
+
+Ho, J.C. (PI), Moller, M., Strycharz, J. & Kroon, A. (2024) Mid-Size Collaborative Research Projects Grant for Comparative Media Dataset from Web Crawl Data, Amsterdam School of Communication Research
+Ho, J.C. (PI) & Chan, C. (2024) DigiCom Seed Funding for Analysis of Nationalist Frames in Multilingual Multinational Texts, Digital Communication Methods Lab
+Barrie, C. & Ho, J.C. (Co-I) (2021) SAGE Concept Grant for academictwitteR Studio, SAGE Publishing
+
+【得獎榮譽】
+
+國立陽明交通大學「華仁青年講座教授」獎勵 (2025)
+Best Student Paper (Runner-up), the Chinese Internet Research Conference (2021)
+Gray Scholarship Award, School of Social and Political Science, University of Edinburgh (2019)
+Best Poster Presentation, European Symposium on Societal Challenges in CSS (2018)
+國立陽明交通大學傳播與科技學系 
+地址:30272 新竹縣竹北市六家五路一段1號 HK214室 
+電話:03-5712121 轉31513  
+傳真:03-5509658 
+®國立陽明交通大學傳播與科技學系. All right reserved.
+傳科系
+碩士班
+陽明交大網站
+Terms & Conditions
+聯絡我們
+網站地圖

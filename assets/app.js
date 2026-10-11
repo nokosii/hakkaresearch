@@ -40,7 +40,7 @@
   const CATS = D.projCats;
   const MAINCATS = ['國科會', '客委會', '文化部', '教育部', '產學合作'];
   const isActive = p => p.status === 'active';
-  const statusLabel = p => p.status === 'retired' ? '退休' : (p.status === 'former' ? '非現任' : '');
+  const statusLabel = p => p.status === 'retired' ? '退休' : (p.status === 'left' ? '離職' : (p.status === 'former' ? '非現任' : ''));
   const ACT = P.filter(isActive);
   // aggregates
   function agg(list) {
@@ -79,7 +79,7 @@
     let h = `<section class="hero">
       <div class="eyebrow">三校客家學院 · 專任師資研究觀察</div>
       <h1>誰在建構臺灣客家知識體系？</h1>
-      <p class="lede">本站彙整國立聯合大學客家研究學院、國立中央大學客家學院、國立陽明交通大學客家文化學院共 ${all.n} 位現任專任教師（另收錄 ${ret.length} 位退休／非現任教師）的公開研究紀錄，統計其客家、客語、客庄相關的著作，以及國科會、客委會、文化部、教育部與產學合作等研究計畫。所有數字都可點入個人頁核對逐筆原始條目。</p>
+      <p class="lede">本站彙整國立聯合大學客家研究學院、國立中央大學客家學院、國立陽明交通大學客家文化學院共 ${all.n} 位現任專任教師（另收錄 ${ret.length} 位退休、離職教師）的公開研究紀錄，統計其客家、客語、客庄相關的著作，以及國科會、客委會、文化部、教育部與產學合作等研究計畫。所有數字都可點入個人頁核對逐筆原始條目。</p>
       <div class="kpis">
         <div class="kpi"><div class="v">${all.n}</div><div class="l">現任專任教師</div><div class="s">3 校 · ${new Set(P.map(p => p.school + p.dept)).size} 個系所</div></div>
         <div class="kpi"><div class="v">${all.withHakkaPub}</div><div class="l">有客家相關著作的教師</div><div class="s">占 ${pct(all.withHakkaPub, all.n)}%</div></div>
@@ -101,7 +101,7 @@
           <dt>客家相關研究計畫</dt><dd>${a.hakkaProjects} 件</dd>
           ${MAINCATS.map(c => `<dt style="padding-left:12px;font-size:14px">└ ${c}</dt><dd style="font-weight:500">${a.cat[c]}</dd>`).join('')}
           <dt>獲客家貢獻獎／專業獎章</dt><dd>${a.honors} 人</dd>
-          <dt>退休／非現任教師（另列）</dt><dd>${P.filter(p => p.school === s && !isActive(p)).length} 人</dd>
+          <dt>退休／離職教師（另列）</dt><dd>${P.filter(p => p.school === s && !isActive(p)).length} 人</dd>
         </dl>
         <div class="depts">${depts(s).map(d => { const x = agg(L.filter(p => p.dept === d)); return `<div><span>${esc(d)}</span><span>${x.withHakkaPub}/${x.n} 人</span></div>`; }).join('')}</div>
         <a class="more" href="#/faculty?school=${s}">查看該校教師 →</a>
@@ -197,7 +197,7 @@
         <input type="search" id="q" placeholder="搜尋姓名、系所…" value="${esc(state.q)}" aria-label="搜尋">
         <select id="fs" aria-label="學校"><option value="">全部學校</option>${ORDER.map(s => `<option value="${s}" ${s === state.school ? 'selected' : ''}>${SCH[s].name}</option>`).join('')}</select>
         <select id="fd" aria-label="系所"><option value="">全部系所</option>${deptOpts.map(([s, d]) => `<option value="${esc(d)}" ${d === state.dept ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select>
-        <select id="fst" aria-label="在職狀態"><option value="">現任＋退休</option><option value="active" ${state.st === 'active' ? 'selected' : ''}>僅現任專任</option><option value="retired" ${state.st === 'retired' ? 'selected' : ''}>僅退休／非現任</option></select>
+        <select id="fst" aria-label="在職狀態"><option value="">全部（含退休、離職）</option><option value="active" ${state.st === 'active' ? 'selected' : ''}>僅現任專任</option><option value="retired" ${state.st === 'retired' ? 'selected' : ''}>僅退休／離職</option></select>
         <span class="count" id="cnt"></span>
       </div>
       <div class="table-wrap"><table><thead><tr>
@@ -300,7 +300,7 @@
       <li>國立中央大學客家學院：客家語文暨社會科學學系（含系主任、專案教師）、法律與政府研究所</li>
       <li>國立陽明交通大學客家文化學院：人文社會學系、傳播與科技學系</li>
     </ul>
-    <p>主要統計只計<b>現任專任教師</b>（不含兼任、合聘、講座）。另收錄<b>退休教師</b>：系所網站列為退休／榮譽教授者、經本站維護者確認已退休者（部分系所網站尚未更新），以及國科會「研究人才查詢」以系所為條件查得、仍登錄於該系所但已不在系所專任名單上的教師（標示為「非現任」）。退休與非現任教師在名錄中加註標籤，可用篩選切換；總覽各項數字只計現任教師。</p>
+    <p>主要統計只計<b>現任專任教師</b>（不含兼任、合聘、講座）。另收錄<b>退休教師</b>：系所網站列為退休／榮譽教授者、經本站維護者確認已退休者（部分系所網站尚未更新），以及國科會「研究人才查詢」以系所為條件查得、仍登錄於該系所但已不在系所專任名單上的教師。已離開該校者標示為「離職」。退休與離職教師在名錄中加註標籤，可用篩選切換；總覽各項數字只計現任教師。</p>
     <h2>2. 研究成果</h2>
     <p>著作以國家科學及技術委員會「研究人才查詢」的「著作目錄」為統一來源，三校格式一致，能用同一把尺比較。著作目錄由教師自行登錄，完整度因人而異；同一著作重複登錄（同標題、同年份）只算一次。</p>
     <h2>3. 研究計畫的來源</h2>
@@ -308,9 +308,10 @@
       <li><b>國科會</b>：國科會研究人才查詢的「計畫總覽」。</li>
       <li><b>客委會、文化部、教育部、地方政府及其他政府機關</b>：政府研究資訊系統（GRB）中以該教師為計畫主持人的計畫，依 GRB 的「計畫主管機關」分類。GRB 以人員代碼區分同名者，只保留與本校系所執行計畫為同一人代碼的資料。GRB 中的國科會／科技部計畫已由國科會資料涵蓋，不重複計入。</li>
       <li><b>產學合作、教育部高教深耕等校內登錄計畫</b>：中央大學「教師履歷平台」的產學合作計畫、高教深耕計畫與其他補助（其他補助未標示委託機關，歸為「其他」）。</li>
-      <li><b>系所個人頁</b>：聯合大學與陽明交大人文社會學系教師個人頁的「研究計畫」段落，依文中出現的委託／補助機關分類（例如客家委員會、文化部、教育部、縣市政府、基金會或公司）。</li>
+      <li><b>系所個人頁</b>：聯合大學三系所、陽明交大人文社會學系與傳播與科技學系教師個人頁中的「研究計畫」「產學合作計畫」等段落（中央大學系所網站沒有教師個人頁，改用教師履歷平台），依文中的委託／補助機關分類。</li>
+      <li><b>產學合作</b>的認定：標示為產學合作，或委託單位為企業、財團法人、基金會、協會者；國科會產學合作類計畫歸在「國科會」。</li>
     </ul>
-    <p>不同來源的同一計畫（標題相同或相互包含）只算一次。限制：陽明交大學術成果平台有機器人驗證、聯合大學沒有公開的計畫查詢系統，因此兩校的產學合作計畫只能取自國科會產學類計畫與教師個人頁，可能低估。</p>
+    <p>不同來源的同一計畫（標題相同或相互包含）只算一次。限制：陽明交大學術成果平台有機器人驗證、聯合大學沒有公開的計畫查詢系統，因此兩校的產學合作計畫取自教師個人頁；未在個人頁列出計畫的教師，產學合作可能低估。</p>
     <h2>4. 「客家相關」的判定</h2>
     <p><b>著作</b>：標題或收錄出處（刊名、出版者）出現下列任一關鍵詞，即判定為客家相關。因此刊登於《全球客家研究》、《客家研究》等期刊的論文也會計入。</p>
     <p><code>${esc(D.keywords)}</code></p>
